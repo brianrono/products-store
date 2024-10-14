@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(//add uniqueness constraint
     {
         name: {
             type: 'string',
-            required: true
+            required: true, unique: true
         },
         price: {
             type: 'number',
-            required: true
+            required: true, unique: true
         },
         image: {
             type: 'string',
-            required: true
+            required: true, unique: true
         },
     },
     {
