@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Product from "../models/product.model.js";
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (_req, res) => {//choose to remove the req parameter or just keep as underscored 
    try {
       const products = await Product.find({});
       res.status(200).json({ success: true, data: products });
@@ -39,6 +39,9 @@ export const updateProduct = async (req, res) => {
 
    try {
       const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
+      if (!updatedProduct) {
+         return res.status(404).json({success: false, message: "Product not found" });//include updated product data in response for consistency
+      }
       res.status(200).json({ success: true, message: "Product updated successfully." });
    } catch (error) {
       res.status(500).json({ success: false, message: "Server error" });
