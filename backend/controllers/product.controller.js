@@ -18,9 +18,13 @@ export const createProduct = async (req, res) => {
       return res.status(400).json({ success: false, message: "Please input all fields." });
    }
 
-   const newProduct = new Product(product)
-
    try {
+      const existingProduct = await Product.findOne({name: product.name});
+      if (existingProduct){
+         return res.status(409).json({success: false, message: "Product with this name already exists." });
+      }
+
+      const newProduct = new Product(product)
       await newProduct.save();
       res.status(201).json({ success: true, data: newProduct });
    } catch (error) {
