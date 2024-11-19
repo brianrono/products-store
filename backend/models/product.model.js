@@ -8,11 +8,11 @@ const productSchema = new mongoose.Schema(//add uniqueness constraint
         },
         price: {
             type: 'number',
-            required: true, unique: true
+            required: true,
         },
         image: {
             type: 'string',
-            required: true, unique: true
+            required: true,
         },
     },
     {
