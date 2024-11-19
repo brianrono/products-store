@@ -1,27 +1,84 @@
 import { useState } from "react";
-import { Container, VStack, Heading, Box, useColorModeValue} from "@chakra-ui/react";
+import { Container, VStack, Heading, Box, useColorModeValue, Button, Input, useToast } from "@chakra-ui/react";
+import { useProductStore } from "../store/product";
 
 const CreatePage = () => {
-   const {newProduct, setNewProduct} = useState({
+   const [newProduct, setNewProduct] = useState({
       name: "",
       price: "",
       image: "",
    });
 
-   return <Container maxW={"container.sm"}>
-      <VStack
-         spacing={8}
-      >
-         <Heading as={"h1"} size={"xl"} textAlign={"center"} mb={8}>
-            Create a new product
-         </Heading>
-         <Box w={"full"} bg={useColorModeValue("white", "gray.800")}
-         px={6} rounded={"lg"} shadow={"md"}
+   const toast = useToast();
+
+   const{createProduct} = useProductStore();
+
+   const handleAddProduct = async () => {
+      const {success, message} = await createProduct(newProduct);
+      // const productData = {
+      //    ...newProduct,
+      //    price: parseFloat(newProduct.price) || 0, //convert to number or set default value if parsing fails
+      // };
+
+      // const response = await createProduct(productData);
+      // const {success, message} = response;
+      if(!success) {
+         toast({
+            title: "Error creating",
+            description: message,
+            status: "error creating",
+            // duration: 5000
+            isClosable: true
+         });
+      }else {
+         toast({
+            title: "Success",
+            description: message,
+            status: "success",
+            isClosable: true
+         });
+      }
+      setNewProduct({name:"", price: "", image: ""});//reset state after product is created
+   };
+
+   return (
+      <Container maxw={"container.sm"}>
+         <VStack
+            spacing={8}
          >
-
-         </Box>
-      </VStack>
-   </Container>;
-};
-
+            <Heading as={"h1"} size={"xl"} textAlign={"center"} mb={8}>
+               Create a new product
+            </Heading>
+            <Box w={"full"} bg={useColorModeValue("white", "gray.800")}
+               padding={6} rounded={"lg"} shadow={"md"}
+            >
+               <VStack spacing={4}>
+                  <Input
+                     placeholder="Product Name"
+                     name="name"
+                     value={newProduct.name}
+                     onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                  />
+                  <Input
+                     placeholder="Price"
+                     name="price"
+                     type="number"
+                     value={newProduct.price}
+                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                  />
+                  <Input
+                     placeholder="Image URL"
+                     name="image"
+                     value={newProduct.image}
+                     onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+                  />
+                  <Button colorScheme="blue" onClick={handleAddProduct} w='full'>
+                     Add Product
+                  </Button>
+               </VStack>
+            </Box>
+         </VStack>
+      </Container>
+   );
+}
 export default CreatePage;
