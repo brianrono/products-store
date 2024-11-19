@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export const useProductStore = create ((set) => ({//for global use
    products: [],
-   setProducts: (products) => set({products}),
+   setProducts: (products) => set({ products }),
    createProduct: async (newProduct) => {
       if(!newProduct.name || !newProduct.price || !newProduct.image) {
          return {success: false, message: "Please fill in all the fields."};
@@ -18,13 +18,13 @@ export const useProductStore = create ((set) => ({//for global use
       if (!res.ok) {
          let errorMessage = "Failed to create product.";
          try {
-            const errorData = await res.json(); // Attempt to read the error response this is line 19
+            const errorData = await res.json();
             errorMessage = errorData.message || errorMessage;
          }
          catch (error) {
             console.error("Failed to parse error response:", error);
          }
-         return { success: false, message: errormessage };
+         return { success: false, message: errorMessage };
       }
 
       const  data = await res.json();
@@ -32,5 +32,3 @@ export const useProductStore = create ((set) => ({//for global use
       return {success: true, message: "Product created successfully."};
    }
 }));
-
-// const [state, useState] = useState([]); //used locally 
