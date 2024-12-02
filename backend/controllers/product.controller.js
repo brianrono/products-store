@@ -11,31 +11,31 @@ export const getProducts = async (_req, res) => {//choose to remove the req para
    }
 };
 
-export const createProduct = async (req, res) => {
-   const product = req.body; //user sends this data
+   export const createProduct = async (req, res) => {
+      const product = req.body; //user sends this data
 
-   if (!product.name || !product.price || !product.image) {
-      return res.status(400).json({ success: false, message: "Please input all fields." });
-   }
-   
-   if (isNaN(Number(req.body.price))) { 
-      return res.status(400).json({ success: false, message: "Price must be a number."})
-   }
-
-   try {
-      const existingProduct = await Product.findOne({name: product.name});
-      if (existingProduct){
-         return res.status(409).json({success: false, message: "Product with this name already exists." });
+      if (!product.name || !product.price || !product.image) {
+         return res.status(400).json({ success: false, message: "Please input all fields." });
+      }
+      
+      if (isNaN(Number(req.body.price))) { 
+         return res.status(400).json({ success: false, message: "Price must be a number."})
       }
 
-      const newProduct = new Product(req.body)
-      await newProduct.save();
-      res.status(201).json({ success: true, data: newProduct });
-   } catch (error) {
-      console.error("Error in Creating Product:", error);
-      res.status(500).json({ success: false, message: "Server error", error: error.message });
-   }
-};
+      try {
+         const existingProduct = await Product.findOne({name: product.name});
+         if (existingProduct){
+            return res.status(409).json({success: false, message: "Product with this name already exists." });
+         }
+
+         const newProduct = new Product(req.body)
+         await newProduct.save();
+         res.status(201).json({ success: true, data: newProduct });
+      } catch (error) {
+         console.error("Error in Creating Product:", error);
+         res.status(500).json({ success: false, message: "Server error", error: error.message });
+      }
+   };
 
 export const updateProduct = async (req, res) => {
    const { id } = req.params;
@@ -66,7 +66,7 @@ export const deleteProduct =  async (req, res) => {
 
    try {
       const deletedProduct = await Product.findByIdAndDelete(id);
-      if(!deletedProduct) {
+      if(!deletedProduct) {//if product doesn't exist
          return res.status(404).json({ success: false, message: "Product not found"});
       }
       res.status(200).json({ success: true, message: "Product deleted." });
