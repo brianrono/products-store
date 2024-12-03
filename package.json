@@ -1,23 +1,89 @@
 {
-  "$schema": "http://json.schemastore.org/package",
-  "name": "products-store",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon backend/index.js"
-  },
-  "type": "module",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0",
-    "mongodb": "^6.9.0",
-    "mongoose": "^8.7.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-  }
+	"$schema": "http://json.schemastore.org/package",
+	"name": "products-store",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon backend/index.js"
+	},
+	"type": "module",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"express": "^4.21.0",
+		"mongodb": "^6.9.0",
+		"mongoose": "^8.7.0"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.7"
+	},
+	"Transform": "AWS::Serverless-2016-10-31",
+	"Resources": {
+		"Layer": {
+			"Type": "AWS::Serverless::LayerVersion",
+			"Properties": {
+				"Description": {
+					"Fn::Sub": [
+						"Stack ${AWS::StackName} Layer ${ResourceName}",
+						{
+							"ResourceName": "Layer"
+						}
+					]
+				},
+				"ContentUri": "src/Layer",
+				"RetentionPolicy": "Retain"
+			}
+		},
+		"Api2": {
+			"Type": "AWS::Serverless::Api",
+			"Properties": {
+				"Name": {
+					"Fn::Sub": [
+						"${ResourceName} From Stack ${AWS::StackName}",
+						{
+							"ResourceName": "Api2"
+						}
+					]
+				},
+				"StageName": "Prod",
+				"DefinitionBody": {
+					"openapi": "3.0",
+					"info": {},
+					"paths": {
+						"/": {
+							"put": {
+								"responses": {}
+							}
+						}
+					}
+				},
+				"EndpointConfiguration": "REGIONAL",
+				"TracingEnabled": true,
+				"Cors": {
+					"MaxAge": 5
+				}
+			}
+		},
+		"Stream": {
+			"Type": "AWS::Kinesis::Stream",
+			"Properties": {
+				"StreamEncryption": {
+					"EncryptionType": "KMS",
+					"KeyId": "alias/aws/kinesis"
+				},
+				"StreamModeDetails": {
+					"StreamMode": "ON_DEMAND"
+				}
+			}
+		},
+		"Analyzer": {
+			"Type": "AWS::AccessAnalyzer::Analyzer",
+			"Properties": {
+				"Type": "<String>"
+			}
+		}
+	}
 }
