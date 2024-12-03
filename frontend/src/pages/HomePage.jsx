@@ -9,7 +9,7 @@ const HomePage = () => {
    const { fetchProducts, products } = useProductStore();
 
    useEffect(() => {
-      // fetchProducts();
+      fetchProducts();
    }, [fetchProducts]);
    console.log("products");
 
