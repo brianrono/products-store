@@ -11,7 +11,7 @@ const HomePage = () => {
    useEffect(() => {
       fetchProducts();
    }, [fetchProducts]);
-   console.log("products");
+   console.log("products", products);
 
    return(
       <Container maxW="container.xl" py={12}>
@@ -39,11 +39,12 @@ const HomePage = () => {
                ))}
             </SimpleGrid>
 
+            {/* UI to display when the're no available products*/}
             {products.length === 0 && (
                <Text fontSize="xl" textAlign={"center"} fontWeight="bold" color="gray.500">
                   No products found 😢{" "}
                   <Link to={"/create"}>
-                     <Text as="span" color="blue.500" _hover={{ textDecoration: "underline" }}>
+                     <Text as="span" color="blue.500" _hover={{ textDecoration: "underline", textTransform: "capitalize" }}>
                         Create new product
                      </Text>
                   </Link>
