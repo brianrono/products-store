@@ -170,10 +170,10 @@ const ProductCard = ({ product }) => {
          <Modal isOpen={isDeleteModalOpen} onClose={handleCloseDeleteModal}>
             <ModalOverlay />
             <ModalContent>
-               <ModalHeader>Confirm Deletion</ModalHeader>
+               <ModalHeader>Please Confirm Deletion</ModalHeader>
                <ModalCloseButton />
                <ModalBody>
-                  <Text>Are you sure you want to delete the selected product?</Text>
+                  <Text>This action will delete the product from your inventory. Would you like to proceed?</Text>
                </ModalBody>
                <ModalFooter>
                   <Button colorScheme="red" mr={3} onClick={handleDeleteProduct}>
