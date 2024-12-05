@@ -34,7 +34,7 @@ A full-stack product management application that allows users to create, view, u
 
 ## Demo
 
-You can access the live version of the app here: [Product Store Live Demo](https://products-store-4.onrender.com/)
+You can access the live version of the app here: [Product Store Live Demo](https://productstore-77ci.onrender.com/)
 
 ---
 
